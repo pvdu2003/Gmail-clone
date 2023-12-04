@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Detail</title>
+    <%- include('../partials/head') %>
+  </head>
+  <% if(typeof user === 'undefined') user = {} %> 
+  <% if(typeof msgs ==='undefined') msgs = {} %>
+  <body>
+    <%- include('../partials/header') %>
+    <div id="container">
+      <%- include('../partials/menu') %>
+      <div id="detail">
+        <h2 class="detail-heading"><%= msgs.email_subject %></h2>
+        <div class="detail-header">
+          <div class="detail-user">
+            <h4><%= msgs.fullname %></h4>
+            <span><</span>
+            <%= msgs.email %>
+            <span>></span>
+          </div>
+          <p><%= msgs.date %></p>
+        </div>
+        <p><%= msgs.email_body %></p>
+        <% if(msgs.attachment !== null){ %> 
+        <% let attachmentPaths = msgs.attachment.split(';'); %> 
+        <% attachmentPaths.forEach(function(attachmentPath) { %>
+        <a href="/download?filename=<%= attachmentPath %>" download><%= attachmentPath %></a></br>
+        <% });} %>
+      </div>
+    </div>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

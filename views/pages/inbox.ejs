@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Inbox</title>
+    <%- include('../partials/head') %>
+    <script>
+      window.addEventListener('load', init)
+      function init() {
+        let deleteBtn = document.getElementById('delete')
+        let table = document.getElementsByClassName('message')
+        deleteBtn.addEventListener('click', async() => {
+          const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+          const ids = [];
+          checkboxes.forEach(checkbox => {
+              ids.push(checkbox.id);
+              checkbox.closest('tr').remove();
+          });
+          for (let i = 0; i < ids.length; i++) {
+          await fetch(`/delete/${ids[i]}`, { method: 'DELETE' });
+          }
+        })
+      }
+    </script>
+  </head>
+  <% if(typeof user === 'undefined') user = {} %> <% if(typeof msgs ===
+  'undefined') msgs = {} %>
+
+  <body>
+    <%- include('../partials/header') %>
+    <div id="container">
+      <%- include('../partials/menu') %>
+      <div id="content">
+        <div class="content-container">
+          <div class="content-header">
+            <button id="delete"><h4>Delete</h4></button>
+          </div>
+          <table class="message">
+            <% msgs.forEach(function(msg) { %>
+            <tr class="message-row">
+              <td><input type="checkbox" name="email" id="<%= msg.id %>" /></td>
+              <td><%= msg.fullname %></td>
+              <td>
+                <a href="/inbox/detail/<%= msg.id %>" class="message-subject"><%= msg.email_subject %></a>
+                </br>
+                <p><%= msg.email_body %></p></td>
+              <td><%= msg.date %></td>
+            </tr>
+            <% }); %>
+          </table>
+        </div>
+        <%- include('../partials/pagination') %>
+      </div>
+    </div>
+    <%- include('../partials/footer') %>
+  </body>
+</html>
